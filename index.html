@@ -54,19 +54,6 @@
         async function drawMap() {
             let import_data = await getData();
             let geojson={type:"FeatureCollection", features:""}
-            let features={}
-            for (let i=0;i<import_data['elements'].length;i++) {
-                features.push({
-                    type: "Feature",
-                    id: import_data['elements'][i]['id'],
-                    properties:{},
-                    geometry:{
-                        type:"Point",
-                        coordinates:[]
-                    }
-                })
-                //add to geojson features
-            }
             console.log(geojson,import_data)
             let map = new L.Map('map', {
                 fullscreenControl: true,
