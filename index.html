@@ -53,7 +53,10 @@
         }
         async function drawMap() {
             let import_data = await getData();
-            let geojson={type:"FeatureCollection"}
+            let geojson={type:"FeatureCollection", features:""}
+            for (let i=0;i<import_data['elements'].length;i++) {
+                //add to geojson features
+            }
             console.log(geojson)
             let map = new L.Map('map', {
                 fullscreenControl: true,
