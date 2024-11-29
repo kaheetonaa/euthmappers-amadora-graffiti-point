@@ -17,11 +17,20 @@
             width: 100%;
             height: 400px;
         }
+        #refreshButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  z-index: 400;
+}
     </style>
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id="map">
+        <button id="refreshButton">Refresh Button</button>
+    </div>
     <script>
         let map = new L.Map('map', {
             fullscreenControl: true,
