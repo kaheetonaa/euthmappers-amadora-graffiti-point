@@ -19,7 +19,7 @@
         }
 
         .leaflet-map-pane {
-            z-index:0;
+            z-index: 0;
         }
 
         #refreshButton {
@@ -37,6 +37,20 @@
         <button id="refreshButton">Refresh Button</button>
     </div>
     <script>
+        function queryOverpassGeoJSON(query) {
+            return new Promise((resolve, reject) => {
+                queryOverpass(query, (error, data) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+        }
+        let query = '[out:json][timeout:25];area(id:3605400888)->.searchArea;node["artwork_type"="graffiti"](area.searchArea);out geom;'
+        let geojson = queryOverpassGeoJSON(query)
+        console.log(geojson)
         let map = new L.Map('map', {
             fullscreenControl: true,
             fullscreenControlOptions: {
