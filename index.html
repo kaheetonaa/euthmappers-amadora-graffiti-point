@@ -12,7 +12,6 @@
     <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
         rel='stylesheet' />
-    <script src="https://cdn.jsdelivr.net/npm/query-overpass@1.5.5/index.min.js"></script>
     <style>
         #map {
             width: 100%;
@@ -38,19 +37,29 @@
         <button id="refreshButton">Refresh Button</button>
     </div>
     <script>
-        function queryOverpassGeoJSON(query) {
-            return new Promise((resolve, reject) => {
-                queryOverpass(query, (error, data) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(data);
-                    }
-                });
+        var getJSON = function (url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'json';
+            xhr.onload = function () {
+                var status = xhr.status;
+                if (status === 200) {
+                    callback(null, xhr.response);
+                } else {
+                    callback(status, xhr.response);
+                }
+            };
+            xhr.send();
+        };
+        let url = 'https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];area(id:3605400888)-%3E.searchArea;node[%22artwork_type%22=%22graffiti%22](area.searchArea);out%20geom;'
+        let geojson = getJSON(url,
+            function (err, data) {
+                if (err !== null) {
+                    alert('Something went wrong: ' + err);
+                } else {
+                    alert('Your query count: ' + data.query.count);
+                }
             });
-        }
-        let query = '[out:json][timeout:25];area(id:3605400888)->.searchArea;node["artwork_type"="graffiti"](area.searchArea);out geom;'
-        let geojson = queryOverpassGeoJSON(query)
         console.log(geojson)
         let map = new L.Map('map', {
             fullscreenControl: true,
