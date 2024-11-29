@@ -37,30 +37,20 @@
         <button id="refreshButton">Refresh Button</button>
     </div>
     <script>
-        var getJSON = function (url, callback) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'json';
-            xhr.onload = function () {
-                var status = xhr.status;
-                if (status === 200) {
-                    callback(null, xhr.response);
-                } else {
-                    callback(status, xhr.response);
-                }
-            };
-            xhr.send();
-        };
-        let url = 'https://overpass-api.de/api/interpreter?data=[out:json][timeout:25];area(id:3605400888)-%3E.searchArea;node[%22artwork_type%22=%22graffiti%22](area.searchArea);out%20geom;'
-        let geojson = getJSON(url,
-            function (err, data) {
-                if (err !== null) {
-                    alert('Something went wrong: ' + err);
-                } else {
-                    alert('Your query count: ' + data.query.count);
-                }
-            });
-        console.log(geojson)
+        async function getPhoRestaurant() {
+            var result = await fetch(
+                "https://overpass-api.de/api/interpreter",
+                {
+                    method: "POST",
+                    body: "data=" + encodeURIComponent(`
+[out:json][timeout:25];area(id:3605400888)->.searchArea;node["artwork_type"="graffiti"](area.searchArea);out geom;
+        `)
+                },
+            ).then(
+                (data) => data.json()
+            )
+            return result;
+        }
         let map = new L.Map('map', {
             fullscreenControl: true,
             fullscreenControlOptions: {
